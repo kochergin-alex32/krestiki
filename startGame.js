@@ -10,8 +10,10 @@ function startGameRender(){
    
     <div class="name">
     <span class="styles">
-    крестики-нолики
+    крестики
     </span>
+    <span class="styles">-</span>
+    <span class="styles">нолики</span>
     </div>
     
     <button class="pusk">начало игры</button>        
