@@ -7,7 +7,7 @@ function renderGameArea(){
 // let nameX = names[0]
 // let nameO = names[1];
     
-    document.body.insertAdjacentHTML('afterbegin',`<div id="game-container">
+    document.body.insertAdjacentHTML('afterbegin',`<div  id="game-container">
     <h1 id="winner">winner</h1>
     <div id="cells-container">
         <div class="cell" data-cell-index="0"></div>
