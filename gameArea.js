@@ -1,9 +1,14 @@
 
 
 function renderGameArea(){
+    const names = JSON.parse(localStorage.getItem('names'));
+// console.log('имна ' +names);
+
+// let nameX = names[0]
+// let nameO = names[1];
     
     document.body.insertAdjacentHTML('afterbegin',`<div id="game-container">
-    <h1 id="winner"></h1>
+    <h1 id="winner">winner</h1>
     <div id="cells-container">
         <div class="cell" data-cell-index="0"></div>
         <div class="cell" data-cell-index="1"></div>
@@ -15,33 +20,31 @@ function renderGameArea(){
         <div class="cell" data-cell-index="7"></div>
         <div class="cell" data-cell-index="8"></div>
     </div>
-    <p id="turn-info"></p>
-    <button id="restart-button">restart</button>
+    <p id="turn-info">?win</p>
+    <button id="restart-button">ещё раз</button>
     
     
     </div>`);
 
-  
-
-}
-const winner = document.querySelector("#winner");
-const cells = document.querySelectorAll('.cell');
-const restartButton = document.querySelector('#restart-button');
+    const winner = document.querySelector("#winner");
+    const cells = document.querySelectorAll('.cell');
+    const restartButton = document.querySelector('#restart-button');
 const turnInfo = document.querySelector('#turn-info');
-let nameX = prompt( "игрок X ваше имя");
-let nameO = prompt( "игрок О ваше имя");
+let nameX = names[0]
+let nameO = names[1];
 
 const players = {
-   x: {
-        x:"x",
-        name:nameX
-        },
-    o: {
-        x:"o",
-        name:nameO
-    }
-}
-let currentPayer = "";
+    x: {
+         x:"x",
+         name:nameX
+         },
+     o: {
+         x:"o",
+         name:nameO
+     }
+ }
+ console.log(players);
+ let currentPayer = "";
 let currentPayerName = '';
 let isGameRunning = false;
 let boardState = Array(9).fill("");
@@ -55,16 +58,15 @@ const winLines = [
     [0,4,8],
     [2,4,6],
 ];
-// console.log(players.x.x);
+console.log(boardState);
+
 function initializeGame(){
-    
+    console.log(2222);
     cells.forEach((cell)=>{
         cell.addEventListener('click', clickCell);
     });
     restartButton.addEventListener('click', restartGame);
 }
-
-
 
 function startGame(){
     isGameRunning = true;
@@ -100,6 +102,7 @@ function clickCell() {
     console.log(currentPayerName);
     turnInfo.textContent = `сейчас ходит '${currentPayerName}'`;
 }
+
 function checkLine(line){
     const [a,b,c] = line;
 
@@ -112,19 +115,21 @@ function checkLine(line){
     return cellA===cellB && cellB===cellC
 
 }
+
 function checkGameOver(){
     
     for(const line of winLines){
         if(checkLine(line)){
-            winner.textContent = `очень неуверено победил  "${currentPayerName}"`;
+            winner.textContent = ` победил  "${currentPayerName}"`;
             return true;
         }
     }
     if(!boardState.includes("")){
-        winner.textContent = "бляяя, вы что разобраться не смогли!!!!";
+        winner.textContent = "ничья!!!!";
         return true;
     }
 };
+
 function finishGame(){
     console.log('fin');
     isGameRunning = false;
@@ -132,6 +137,7 @@ function finishGame(){
    
   
 };
+
 
 function restartGame() {
     finishGame();
@@ -141,9 +147,13 @@ function restartGame() {
 
 };
 
-window.addEventListener('load', () =>{
-    initializeGame();
-    startGame();
+    // initializeGame();
+   
     
-});
+        initializeGame();
+        startGame();
+        
+   
 
+    
+}
