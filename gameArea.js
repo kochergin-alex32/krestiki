@@ -75,7 +75,7 @@ function startGame(){
     winner.textContent = "";
     currentPayer = players.x.x;
     currentPayerName = players.x.name
-    turnInfo.textContent = `сейчас ходит '${currentPayerName}'`;
+    turnInfo.textContent = ` ходит '${currentPayerName}'`;
   
 }
 
