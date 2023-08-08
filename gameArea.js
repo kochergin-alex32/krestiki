@@ -100,7 +100,7 @@ function clickCell() {
     currentPayer = (currentPayer === players.x.x) ? players.o.x : players.x.x;
     currentPayerName = (currentPayerName===players.x.name) ? players.o.name : players.x.name;
     console.log(currentPayerName);
-    turnInfo.textContent = `сейчас ходит '${currentPayerName}'`;
+    turnInfo.textContent = `ходит '${currentPayerName}'`;
 }
 
 function checkLine(line){
