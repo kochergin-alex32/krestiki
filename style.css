@@ -1,4 +1,4 @@
- body{
+body{
     /* border: 1px solid red; */
     /* padding-right: 30px; */
     
@@ -111,7 +111,7 @@ label{
 .nameInp:hover,.nameInp:active{
     border: 2px solid rosybrown !important;
 }
-.start,.pusk{
+.start,.pusk,.pusk1{
     width: 50%;
     border-radius: 5px;
     border: 2px solid deepskyblue;

@@ -75,7 +75,7 @@ function startGame(){
     winner.textContent = "";
     currentPayer = players.x.x;
     currentPayerName = players.x.name
-    turnInfo.textContent = ` ходит '${currentPayerName}'`;
+    turnInfo.textContent = ` ходит ${currentPayerName}`;
   
 }
 
@@ -100,7 +100,7 @@ function clickCell() {
     currentPayer = (currentPayer === players.x.x) ? players.o.x : players.x.x;
     currentPayerName = (currentPayerName===players.x.name) ? players.o.name : players.x.name;
     console.log(currentPayerName);
-    turnInfo.textContent = `ходит '${currentPayerName}'`;
+    turnInfo.textContent = `ходит ${currentPayerName}`;
 }
 
 function checkLine(line){
@@ -120,7 +120,7 @@ function checkGameOver(){
     
     for(const line of winLines){
         if(checkLine(line)){
-            winner.textContent = ` победил  "${currentPayerName}"`;
+            winner.textContent = ` победил  ${currentPayerName}`;
             return true;
         }
     }
@@ -157,3 +157,4 @@ function restartGame() {
 
     
 }
+

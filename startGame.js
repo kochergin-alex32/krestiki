@@ -15,9 +15,9 @@ function startGameRender(){
     <span class="styles">-</span>
     <span class="styles">нолики</span>
     </div>
-    
-    <button class="pusk">начало игры</button>        
-    </div>
+    <button class="pusk1">играть одному</button>        
+    <button class="pusk">играть вдвоём</button>        
+     </div>
     `
     
 }
@@ -30,5 +30,15 @@ function newGame(){
     registerNameRender();
   
 }
+function newGame1(){
+ 
+    
+    console.log(7777);
+    document.body.innerHTML = "";
+
+    registerNameRender1();
+  
+}
 
 document.querySelector('.pusk').addEventListener('click', newGame)
+document.querySelector('.pusk1').addEventListener('click', newGame1)
