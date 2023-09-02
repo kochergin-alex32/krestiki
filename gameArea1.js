@@ -2,8 +2,8 @@ function renderGameArea1(){
     const names = JSON.parse(localStorage.getItem('names'));
 // console.log('имна ' +names);
 
-// let nameX = names[0]
-// let nameO = names[1];
+let nameX = names[0]
+let nameO = names[1];
     
     document.body.insertAdjacentHTML('afterbegin',`<div  id="game-container">
     <h1 id="winner">winner</h1>
@@ -23,13 +23,11 @@ function renderGameArea1(){
     
     
     </div>`);
-
-    const winner = document.querySelector("#winner");
-    const cells = document.querySelectorAll('.cell');
-    const restartButton = document.querySelector('#restart-button');
+let isGameRunning = false;
+const winner = document.querySelector("#winner");
+const cells = document.querySelectorAll('.cell');
+const restartButton = document.querySelector('#restart-button');
 const turnInfo = document.querySelector('#turn-info');
-let nameX = names[0]
-let nameO = names[1];
 
 const players = {
     x: {
@@ -38,14 +36,17 @@ const players = {
          },
      o: {
          x:"o",
-         name:nameO
+         name:"o"
+        //  name:nameO
      }
  }
- console.log(players);
+//  console.log(players);
  let currentPayer = "";
-let currentPayerName = '';
-let isGameRunning = false;
-let boardState = Array(9).fill("");
+let currentPayerName = ''
+
+let boardState = [null, null, null, null, null, null, null, null, null]
+let arrWin = Array(9).fill("");
+
 const winLines = [
     [0,1,2],
     [3,4,5],
@@ -56,20 +57,15 @@ const winLines = [
     [0,4,8],
     [2,4,6],
 ];
-console.log(boardState);
 
-function initializeGame(){
-    console.log(2222);
-    cells.forEach((cell)=>{
-        cell.addEventListener('click', clickCell);
-    });
-    restartButton.addEventListener('click', restartGame);
-}
+
 
 function startGame(){
-    isGameRunning = true;
+    isGameRunning = false;
     cells.forEach(cell => cell.textContent = "");
-    boardState = Array(9).fill("");
+    boardState = [null, null, null, null, null, null, null, null, null]
+    arrWin = Array(9).fill("");
+
     winner.textContent = "";
     currentPayer = players.x.x;
     currentPayerName = players.x.name
@@ -77,109 +73,83 @@ function startGame(){
   
 }
 
-function botZero () {
- 
-    var tempArr=[]
-    for(var i = 0;i<9; i++){
-        if(boardState[i]===""){
-            tempArr.push(i)
-        }
-    } 
-    
-    if(tempArr.length>7){
-      const randIndex= Math.floor(Math.random()*tempArr.length);
-      var randNull = tempArr[randIndex]
-      boardState[randNull]= players.o.x
-      var sel = cells[randNull];
-      sel.textContent =players.o.x
-    }
 
-    for(const line of winLines){
-        const [a,b,c]=line
-        const cellA = cells[a];
-         const cellB = cells[b];
-         const cellC = cells[c];
-        
-         const arrO= [cellA,cellB,cellC]
-       
-         if(cellA.textContent==="x"&&cellB.textContent==="x"){
-             turnInfo.textContent = "";
-             cellC.textContent =players.o.x;
-             boardState[cellC.dataset.cellIndex]= players.o.x
-         }if(cellC.textContent==="x"&&cellB.textContent==="x"){
-             turnInfo.textContent = "";
-             cellA.textContent =players.o.x;
-             boardState[cellA.dataset.cellIndex]= players.o.x
-         }
-         if(cellA.textContent==="x"&&cellC.textContent==="x"){
-             turnInfo.textContent = "";
-             cellB.textContent =players.o.x;
-             boardState[cellB.dataset.cellIndex]= players.o.x
-         }
-       
-        
-      }
-
-
-  for(const line of winLines){
-       
-    if(checkLine(line)){
-
-        // isGameRunning = false;
-        // turnInfo.textContent = "";
-        winner.textContent = ` победил o`;
-        return true;
-    }
-}
-}
-
-
-function clickCell() {
-   
-    if(!isGameRunning){
-        
-        return;
-    }
-    if(this.textContent){
-     
-        return;
-    }
-    this.textContent = currentPayer;
-    const cellIndex = this.dataset.cellIndex;
-    boardState[cellIndex] = currentPayer;
-   
-    if(checkGameOver()){
-        return finishGame();
-    }
-    botZero () 
-    
-    turnInfo.textContent = `ходит ${currentPayerName}`;
+const concat = (a, b, c)=>{
+	let result = boardState[a] + boardState[b] + boardState[c] 
+	
+	if (result === "xxx" || result === "ooo"){
+		return result
+	}
+	
+	switch (result){
+		case "xxnull":
+          
+			return ["x", c]
+			
+		case "xnullx":
+			return ["x", b]
+			
+		case "nullxx":
+			return ["x", a]
+			
+		case "oonull":
+			return ["o", c]
+			
+		case "onullo":
+			return ["o", b]
+			
+		case "nulloo":
+			return ["o", a]
+	}
+    // console.log(result);
 }
 
 function checkLine(line){
     const [a,b,c] = line;
-
-    const cellA = boardState[a];
-    const cellB = boardState[b];
-    const cellC = boardState[c];
+   
+    boardState.forEach((item,i)=>{
+        if(item!=null){
+            // console.log(item, i);
+            arrWin[i]=item
+        }
+    })
+    const cellA = arrWin[a];
+    const cellB = arrWin[b];
+    const cellC = arrWin[c];
     if ([cellA,cellB,cellC].includes("")){
         return false;
     }
-    return cellA===cellB && cellB===cellC
+    if(cellA==="o" && cellB==="o" && cellC==="o"){
+        console.log(cellA,cellB,cellC);
+        winner.textContent = ` ${currentPayerName}, ты проиграл((`;
+        // turnInfo.textContent =""
+        // isGameRunning = true;
+        finishGame()
+    }else{
+        return cellA===cellB && cellB===cellC
+
+    }
+ 
+    // return cellA===cellB && cellB===cellC
 
 }
+
 
 function checkGameOver(){
     
     for(const line of winLines){
-       
+
         if(checkLine(line)){
-            winner.textContent = ` победил  ${currentPayerName}`;
+            winner.textContent = ` ${currentPayerName} победил!!)))`;
+            // turnInfo.textContent =""
+            // isGameRunning = true;
+            finishGame()
             return true;
         }
     }
-    if(!boardState.includes("")){
+    if(!arrWin.includes("")){
         winner.textContent = "ничья!!!!";
+        
         return true;
     }
     
@@ -188,28 +158,122 @@ function checkGameOver(){
 function finishGame(){
     console.log('fin');
     
-    isGameRunning = false;
+    isGameRunning = true;
+    // isGameRunning = false;
     turnInfo.textContent = "";
    
   
 };
 
 
-function restartGame() {
-    finishGame();
-    // boardState = Array(9).fill("");
-    startGame();
-    console.log(boardState);
+const botZero = ()=>{
+	
+	//проверка комбинаций из двух "оо"
+	for (var i = 0; i < 3; i++){
+		var result = concat(i, i + 3, i + 6)
+		
+		if (typeof(result) === "object" && result[0] === "o"){
+			cells[result[1]].innerHTML = "o"
+			boardState[result[1]] = "o"
+			return
+		}
+	}
+	
+	for (var i = 0; i <= 6; i +=3){
+		var result = concat(i, i + 1, i + 2)
+		
+		if (typeof(result) === "object" && result[0] === "o"){
+			cells[result[1]].innerHTML = "o"
+			boardState[result[1]] = "o"
+			return
+		}
+	}
+	
+	result = concat(0, 4, 8)
+	if (typeof(result) === "object" && result[0] === "o"){
+		cells[result[1]].innerHTML = "o"
+		boardState[result[1]] = "o"
+		return
+	}
+	
+	result = concat(2, 4, 6)
+	if (typeof(result) === "object" && result[0] === "o"){
+		cells[result[1]].innerHTML = "o"
+		boardState[result[1]] = "o"
+		return
+	}	
+	
+	//проверка комбинаций из двух "xx"
+	for (var i = 0; i < 3; i++){
+		var result = concat(i, i + 3, i + 6)
+		
+		if (typeof(result) === "object" && result[0] === "x"){
+			cells[result[1]].innerHTML = "o"
+			boardState[result[1]] = "o"
+			return
+		}
+	}
+	
+	for (var i = 0; i <= 6; i +=3){
+		var result = concat(i, i + 1, i + 2)
+		
+		if (typeof(result) === "object" && result[0] === "x"){
+			cells[result[1]].innerHTML = "o"
+			boardState[result[1]] = "o"
+			return
+		}
+	}
+	
+	result = concat(0, 4, 8)
+	if (typeof(result) === "object" && result[0] === "x"){
+		cells[result[1]].innerHTML = "o"
+		boardState[result[1]] = "o"
+		return
+	}
+	
+	result = concat(2, 4, 6)
+	if (typeof(result) === "object" && result[0] === "x"){
+		cells[result[1]].innerHTML = "o"
+		boardState[result[1]] = "o"
+		return
+	}
+	
+	// ставим "о" в случайную пустую ячейку
+	var tempArr = []
+	
+	for(var i = 0; i < 9; i++){
+		if (boardState[i] === null){
+			tempArr.push(i)
+		}
+	}
+	
+	var randIndexTempArr = Math.floor(Math.random() * tempArr.length)
+	
+	var randNull = tempArr[randIndexTempArr]
+	
+	cells[randNull].innerHTML = "o"
+	boardState[randNull] = "o"	
+}
 
-};
+restartButton.addEventListener('click',startGame );
 
-    // initializeGame();
-   
-    
-        initializeGame();
-        startGame();
-        
-   
+addEventListener("click", function(e){
+    let sell = e.target
+    let sellIndex = sell.dataset.cellIndex
+	if (isGameRunning === true){return}
+	if (sell.className === "cell" && sell.textContent === ""){
+		sell.textContent = currentPayer
+		boardState[sellIndex] = currentPayer
+	}
+    else{
+		return
+	}
+// для отрисовки ничьей
+    checkGameOver()
+    if (isGameRunning === true){return}
+        botZero()
+        checkGameOver()
+    })
 
-    
+startGame()
 }
