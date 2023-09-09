@@ -1,9 +1,10 @@
 body{
     /* border: 1px solid red; */
     /* padding-right: 30px; */
+    /* cursor:pointer; */
     
 
-}
+} 
 
 .styles{
     font-size: 60px;
@@ -123,3 +124,28 @@ label{
 .start:hover{
     border: 2px solid rosybrown !important;
 }
+.winCounter{
+    /* border: 1px solid red; */
+    width: 90%;
+    display: flex;
+    justify-content:space-between;
+   
+} 
+
+
+
+.wins{
+    /* border-radius: 10px; */
+    /* border: 2px solid deepskyblue; */
+    /* padding: 5px; */
+    /* background-color: buttonface; */
+    font-size: 20px;
+   line-height:3.9em;
+   display: flex;
+   flex-direction: row;
+   justify-content: space-around;
+}
+#wins2{
+font-size: 15px;
+}
+

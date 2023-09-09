@@ -6,7 +6,17 @@ let nameX = names[0]
 let nameO = names[1];
     
     document.body.insertAdjacentHTML('afterbegin',`<div  id="game-container">
-    <h1 id="winner">winner</h1>
+	<div class="winCounter">
+    <div class="wins">
+    <div id="wins1"></div>:
+    <span id="check1">0</span>
+</div> 
+<h1 id="winner">победил</h1>
+<div class="wins" >
+    <div id="wins2">💻</div>:
+     <span id="check2">0</span>
+    </div>
+</div>
     <div id="cells-container">
         <div class="cell" data-cell-index="0"></div>
         <div class="cell" data-cell-index="1"></div>
@@ -32,15 +42,16 @@ const turnInfo = document.querySelector('#turn-info');
 const players = {
     x: {
          x:"x",
+       
          name:nameX
          },
      o: {
          x:"o",
-         name:"o"
-        //  name:nameO
+       
+         name:nameO
      }
  }
-//  console.log(players);
+
  let currentPayer = "";
 let currentPayerName = ''
 
@@ -58,6 +69,11 @@ const winLines = [
     [2,4,6],
 ];
 
+// переменнные для счетчика
+const win1= document.querySelector('#wins1');
+// const win2= document.querySelector('#wins2');
+const check1 = document.querySelector('#check1');
+const check2 = document.querySelector('#check2');
 
 
 function startGame(){
@@ -70,11 +86,15 @@ function startGame(){
     currentPayer = players.x.x;
     currentPayerName = players.x.name
     turnInfo.textContent = ` ходит ${currentPayerName}`;
+
+	 // ниже переменные присваивают имена пользователей счетчику
+	 win1.textContent=`${nameX}`;
+	 // win2.textContent=`${nameO} `;
   
 }
 
 
-const concat = (a, b, c)=>{
+const concat = function(a, b, c){
 	let result = boardState[a] + boardState[b] + boardState[c] 
 	
 	if (result === "xxx" || result === "ooo"){
@@ -109,7 +129,7 @@ function checkLine(line){
    
     boardState.forEach((item,i)=>{
         if(item!=null){
-            // console.log(item, i);
+           
             arrWin[i]=item
         }
     })
@@ -121,16 +141,21 @@ function checkLine(line){
     }
     if(cellA==="o" && cellB==="o" && cellC==="o"){
         console.log(cellA,cellB,cellC);
-        winner.textContent = ` ${currentPayerName}, ты проиграл((`;
-        // turnInfo.textContent =""
-        // isGameRunning = true;
+        winner.textContent = ` победил 💻`;
+		let chek1=`${check1.textContent}`;
+		let chek2=`${check2.textContent}`;
+		if(currentPayerName===win1.textContent){
+		chek2++;
+		check2.textContent=chek2
+		}
+		
         finishGame()
     }else{
         return cellA===cellB && cellB===cellC
 
     }
  
-    // return cellA===cellB && cellB===cellC
+   
 
 }
 
@@ -140,9 +165,17 @@ function checkGameOver(){
     for(const line of winLines){
 
         if(checkLine(line)){
-            winner.textContent = ` ${currentPayerName} победил!!)))`;
-            // turnInfo.textContent =""
-            // isGameRunning = true;
+            winner.textContent = ` победил ${currentPayerName}`;
+			 
+			
+		//    счетчик побед
+		let chek1=`${check1.textContent}`;
+		let chek2=`${check2.textContent}`;
+		if(currentPayerName===win1.textContent){
+		chek1++;
+		check1.textContent=chek1
+		}
+		
             finishGame()
             return true;
         }
@@ -159,7 +192,7 @@ function finishGame(){
     console.log('fin');
     
     isGameRunning = true;
-    // isGameRunning = false;
+   
     turnInfo.textContent = "";
    
   
@@ -271,7 +304,8 @@ addEventListener("click", function(e){
 // для отрисовки ничьей
     checkGameOver()
     if (isGameRunning === true){return}
-        botZero()
+	setTimeout(botZero(),500);
+        // botZero()
         checkGameOver()
     })
 

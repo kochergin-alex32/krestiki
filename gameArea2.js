@@ -8,7 +8,17 @@ function renderGameArea(){
 // let nameO = names[1];
     
     document.body.insertAdjacentHTML('afterbegin',`<div  id="game-container">
-    <h1 id="winner">winner</h1>
+    <div class="winCounter">
+    <div class="wins">
+    <div id="wins1"></div>:
+    <span id="check1">0</span>
+</div> 
+<h1 id="winner">победил</h1>
+<div class="wins" >
+    <div id="wins2"></div>:
+     <span id="check2">0</span>
+    </div>
+</div>
     <div id="cells-container">
         <div class="cell" data-cell-index="0"></div>
         <div class="cell" data-cell-index="1"></div>
@@ -32,7 +42,6 @@ function renderGameArea(){
 const turnInfo = document.querySelector('#turn-info');
 let nameX = names[0]
 let nameO = names[1];
-
 const players = {
     x: {
          x:"x",
@@ -43,7 +52,6 @@ const players = {
          name:nameO
      }
  }
- console.log(players);
  let currentPayer = "";
 let currentPayerName = '';
 let isGameRunning = false;
@@ -58,10 +66,17 @@ const winLines = [
     [0,4,8],
     [2,4,6],
 ];
-console.log(boardState);
+
+// переменнные для счетчика
+const win1= document.querySelector('#wins1');
+const win2= document.querySelector('#wins2');
+const check1 = document.querySelector('#check1');
+const check2 = document.querySelector('#check2');
+
+
 
 function initializeGame(){
-    console.log(2222);
+    // console.log(2222);
     cells.forEach((cell)=>{
         cell.addEventListener('click', clickCell);
     });
@@ -76,6 +91,10 @@ function startGame(){
     currentPayer = players.x.x;
     currentPayerName = players.x.name
     turnInfo.textContent = ` ходит ${currentPayerName}`;
+
+    // ниже переменные присваивают имена пользователей счетчику
+    win1.textContent=`${nameX}`;
+    win2.textContent=`${nameO} `;
   
 }
 
@@ -99,7 +118,6 @@ function clickCell() {
     }
     currentPayer = (currentPayer === players.x.x) ? players.o.x : players.x.x;
     currentPayerName = (currentPayerName===players.x.name) ? players.o.name : players.x.name;
-    console.log(currentPayerName);
     turnInfo.textContent = `ходит ${currentPayerName}`;
 }
 
@@ -121,6 +139,19 @@ function checkGameOver(){
     for(const line of winLines){
         if(checkLine(line)){
             winner.textContent = ` победил  ${currentPayerName}`;
+
+        //    счетчик побед
+            let chek1=`${check1.textContent}`;
+            let chek2=`${check2.textContent}`;
+            if(currentPayerName===win1.textContent){
+            chek1++;
+            check1.textContent=chek1
+            }
+            else{
+            chek2++;
+            check2.textContent=chek2
+            }
+           
             return true;
         }
     }
@@ -131,6 +162,7 @@ function checkGameOver(){
 };
 
 function finishGame(){
+    
     console.log('fin');
     isGameRunning = false;
     turnInfo.textContent = "";
@@ -157,4 +189,5 @@ function restartGame() {
 
     
 }
+
 
